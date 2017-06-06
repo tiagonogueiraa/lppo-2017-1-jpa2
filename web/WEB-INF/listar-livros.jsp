@@ -25,7 +25,7 @@
         <c:forEach var="livro" items="${livros}">
         
         <tr>
-        <td>${livro.id}</td>
+            <td><a href="editar.html?id=${livro.id}">${livro.id}</a></td>
         <td>${livro.titulo}</td>
         <td>${livro.autor}</td>
         <td>${livro.ano}</td>
