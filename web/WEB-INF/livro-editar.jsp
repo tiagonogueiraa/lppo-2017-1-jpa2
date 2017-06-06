@@ -12,6 +12,8 @@
         <title>Editar</title>
     </head>
     <body>
+                <%@include file="jspf/menu.jspf" %>
+
         <h1>Novo Livro</h1>
         <form method="post">
             <label> id: <input name="id" type="hidden" value="${livro.id}"/>${livro.id}</label>

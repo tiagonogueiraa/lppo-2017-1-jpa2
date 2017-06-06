@@ -13,6 +13,8 @@
         <title>JSP Page</title>
     </head>
     <body>
+                <%@include file="jspf/menu.jspf" %>
+
         <h1>Listar livros</h1>
         <table>
             <th>

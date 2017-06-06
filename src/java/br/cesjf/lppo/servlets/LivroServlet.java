@@ -77,7 +77,7 @@ public class LivroServlet extends HttpServlet {
             request.getRequestDispatcher("WEB-INF/livro-editar.jsp").forward(request, response);
 
         } catch (Exception e) {
-            response.sendRedirect("Listar.html");
+            response.sendRedirect("listar.html");
 
         }
     }
@@ -97,10 +97,10 @@ public class LivroServlet extends HttpServlet {
 
             dao.edit(livro);
 
-            response.sendRedirect("Listar.html");
+            response.sendRedirect("listar.html");
 
         } catch (Exception e) {
-            response.sendRedirect("Listar.html");
+            response.sendRedirect("listar.html");
 
         }
     }
@@ -117,7 +117,7 @@ public class LivroServlet extends HttpServlet {
         } catch (Exception ex) {
             
         }
-            response.sendRedirect("Listar.html");
+            response.sendRedirect("listar.html");
     }
 
     private void doListarGet(HttpServletRequest request, HttpServletResponse response)
@@ -159,7 +159,7 @@ public class LivroServlet extends HttpServlet {
         
         try {
             dao.create(livro1);
-            response.sendRedirect("Listar.html");
+            response.sendRedirect("listar.html");
         } catch (Exception ex) {
             Logger.getLogger(LivroServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
