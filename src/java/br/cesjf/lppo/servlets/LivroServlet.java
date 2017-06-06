@@ -9,6 +9,10 @@ import br.cesjf.lppo.Livro;
 import br.cesjf.lppo.dao.LivroJpaController;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
@@ -25,7 +29,7 @@ import javax.xml.rpc.Call;
  *
  * @author alunoces
  */
-@WebServlet(name = "LivroServlet", urlPatterns = {"/editar.html", "/excluir.html"})
+@WebServlet(name = "LivroServlet", urlPatterns = {"/editar.html", "/excluir.html", "/criar.html", "/listar.html"})
 public class LivroServlet extends HttpServlet {
 
     @PersistenceUnit(unitName = "lppo-2017-1-jpa2PU")
@@ -41,6 +45,10 @@ public class LivroServlet extends HttpServlet {
             doEditarGet(request, response);
         } else if (request.getServletPath().contains("/excluir.html")) {
             doExcluirGet(request, response);
+        } else if (request.getServletPath().contains(("/listar.html"))) {
+            doListarGet(request, response);
+        } else if (request.getServletPath().contains(("criar.html"))){
+            doCriarGet(request, response);
         }
 
     }
@@ -51,6 +59,8 @@ public class LivroServlet extends HttpServlet {
 
         if (request.getServletPath().contains("/editar.html")) {
             doEditarPost(request, response);
+        } else if (request.getServletPath().contains("/criar.html")) {
+            doCriarPost(request, response);
         }
 
     }
@@ -67,7 +77,7 @@ public class LivroServlet extends HttpServlet {
             request.getRequestDispatcher("WEB-INF/livro-editar.jsp").forward(request, response);
 
         } catch (Exception e) {
-            response.sendRedirect("listar.html");
+            response.sendRedirect("Listar.html");
 
         }
     }
@@ -87,10 +97,10 @@ public class LivroServlet extends HttpServlet {
 
             dao.edit(livro);
 
-            response.sendRedirect("listar.html");
+            response.sendRedirect("Listar.html");
 
         } catch (Exception e) {
-            response.sendRedirect("listar.html");
+            response.sendRedirect("Listar.html");
 
         }
     }
@@ -106,7 +116,54 @@ public class LivroServlet extends HttpServlet {
 
         } catch (Exception ex) {
             
-            response.sendRedirect("listar.html");
         }
+            response.sendRedirect("Listar.html");
+    }
+
+    private void doListarGet(HttpServletRequest request, HttpServletResponse response)
+     throws ServletException, IOException {
+        try {
+             List<Livro> livros = new ArrayList<>();
+
+        LivroJpaController dao = new LivroJpaController(ut, emf);
+        
+        livros = dao.findLivroEntities();
+
+        request.setAttribute("livros", livros);
+        request.getRequestDispatcher("WEB-INF/listar-livros.jsp").forward(request, response);
+        }
+        catch (Exception ex){
+            
+        }
+}
+
+    private void doCriarGet(HttpServletRequest request, HttpServletResponse response)
+    throws ServletException, IOException{
+        try {
+             request.getRequestDispatcher("WEB-INF/novo-livro.jsp").forward(request, response);
+        } catch (Exception ex){
+            
+        }
+       
+    }
+
+    private void doCriarPost(HttpServletRequest request, HttpServletResponse response)
+    throws ServletException, IOException {
+        
+        Livro livro1 = new Livro();
+        livro1.setTitulo(request.getParameter("titulo"));
+        livro1.setAno(Integer.parseInt(request.getParameter("ano")));
+        livro1.setAutor(request.getParameter("autor"));
+
+        LivroJpaController dao = new LivroJpaController(ut, emf);
+        
+        try {
+            dao.create(livro1);
+            response.sendRedirect("Listar.html");
+        } catch (Exception ex) {
+            Logger.getLogger(LivroServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
     }
 }
