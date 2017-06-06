@@ -39,6 +39,8 @@ public class LivroServlet extends HttpServlet {
             throws ServletException, IOException {
         if (request.getServletPath().contains("/editar.html")) {
             doEditarGet(request, response);
+        } else if (request.getServletPath().contains("/excluir.html")) {
+            doExcluirGet(request, response);
         }
 
     }
@@ -46,7 +48,7 @@ public class LivroServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         if (request.getServletPath().contains("/editar.html")) {
             doEditarPost(request, response);
         }
@@ -69,7 +71,7 @@ public class LivroServlet extends HttpServlet {
 
         }
     }
-    
+
     private void doEditarPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
@@ -82,15 +84,29 @@ public class LivroServlet extends HttpServlet {
             livro.setTitulo(request.getParameter("titulo"));
             livro.setAutor(request.getParameter("autor"));
             livro.setAno(Integer.parseInt(request.getParameter("ano")));
-            
+
             dao.edit(livro);
-            
-            
-           response.sendRedirect("listar.html");
+
+            response.sendRedirect("listar.html");
 
         } catch (Exception e) {
             response.sendRedirect("listar.html");
 
+        }
+    }
+
+    private void doExcluirGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            LivroJpaController dao = new LivroJpaController(ut, emf);
+
+            //quero do banco o que tem id, que é o que está na requisicao
+            Long id = Long.parseLong(request.getParameter("id"));
+            dao.destroy(id);
+
+        } catch (Exception ex) {
+            
+            response.sendRedirect("listar.html");
         }
     }
 }
